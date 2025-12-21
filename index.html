@@ -66,6 +66,7 @@
       if (type === "percentageToCgpa") {
         const p = parseFloat(document.getElementById("percentage").value);
         if (isNaN(p) || p < 0 || p > 100) return showResult("Invalid percentage value!");
+        else if (p >= 95) return showResult("CGPA = 10");
         showResult("CGPA = " + (p / 9.5).toFixed(2));
       }
       else if (type === "sgpaToCgpa") {
