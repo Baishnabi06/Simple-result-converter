@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Result Converter</title>
+  <link rel="stylesheet" href="restyle.css">
+</head>
+<body>
+  <h2>Result Converter</h2>
+  <div class="container">
+    <label for="conversionType">Select Conversion Type:</label>
+    <select id="conversionType">
+      <option value="percentageToCgpa">Percentage → CGPA</option>
+      <option value="sgpaToCgpa">SGPA → CGPA</option>
+      <option value="sgpaToPercentage">SGPA → Percentage</option>
+      <option value="marksToPercentage">Total Marks → Percentage</option>
+    </select>
+    <div id="inputSection"></div>
+    <button id="convertBtn">Convert</button>
+    <div class="result" id="resultDisplay">Result will appear here</div>
+  </div>
+  <footer>© 2025 Result Converter |2409014</footer>
+  <script>
+    const conversionType = document.getElementById("conversionType");
+    const inputSection = document.getElementById("inputSection");
+    const convertBtn = document.getElementById("convertBtn");
+    const resultDisplay = document.getElementById("resultDisplay");
+
+    function loadInputs() {
+      const type = conversionType.value;
+      resultDisplay.textContent = "Result will appear here";
+      if (type === "percentageToCgpa") {
+        inputSection.innerHTML = `
+          <label for="percentage">Enter Percentage (%):</label>
+          <input id="percentage" type="number" min="0" max="100" step="0.01" placeholder="e.g. 85" />
+        `;
+      } else if (type === "sgpaToCgpa") {
+        inputSection.innerHTML = `
+          <label for="sgpas">Enter SGPAs (comma separated):</label>
+          <input id="sgpas" type="text" placeholder="e.g. 8.2, 7.9, 8.5" />
+        `;
+      } else if (type === "sgpaToPercentage") {
+        inputSection.innerHTML = `
+          <label for="sgpa">Enter SGPA:</label>
+          <input id="sgpa" type="number" min="0" max="10" step="0.01" placeholder="e.g. 8.5" />
+        `;
+      } else if (type === "marksToPercentage") {
+        inputSection.innerHTML = `
+          <label for="total">Total Marks:</label>
+          <input id="total" type="number" min="1" placeholder="e.g. 600" />
+          <label for="secured">Secured Marks:</label>
+          <input id="secured" type="number" min="0" placeholder="e.g. 480" />
+        `;
+      }
+    }
+
+    function showResult(msg) {
+      resultDisplay.textContent = msg;
+    }
+
+    function convert() {
+      const type = conversionType.value;
+
+      if (type === "percentageToCgpa") {
+        const p = parseFloat(document.getElementById("percentage").value);
+        if (isNaN(p) || p < 0 || p > 100) return showResult("Invalid percentage value!");
+        showResult("CGPA = " + (p / 9.5).toFixed(2));
+      }
+      else if (type === "sgpaToCgpa") {
+        const sgpaStr = document.getElementById("sgpas").value;
+        if (!sgpaStr.trim()) return showResult("Please enter one or more SGPA values!");
+        const sgpas = sgpaStr.split(",").map(x => parseFloat(x.trim()));
+        if (sgpas.some(isNaN) || sgpas.length === 0) return showResult("Invalid SGPA values!");
+        const avg = sgpas.reduce((a, b) => a + b, 0) / sgpas.length;
+        showResult("CGPA = " + avg.toFixed(2));
+      }
+      else if (type === "sgpaToPercentage") {
+        const sgpa = parseFloat(document.getElementById("sgpa").value);
+        if (isNaN(sgpa) || sgpa < 0 || sgpa > 10) return showResult("Invalid SGPA value!");
+        showResult("Percentage = " + (sgpa * 9.5).toFixed(2) + "%");
+      }
+      else if (type === "marksToPercentage") {
+        const total = parseFloat(document.getElementById("total").value);
+        const secured = parseFloat(document.getElementById("secured").value);
+        if (isNaN(total) || total <= 0) return showResult("Invalid total marks!");
+        if (isNaN(secured) || secured < 0 || secured > total) return showResult("Invalid secured marks!");
+        showResult("Percentage = " + ((secured / total) * 100).toFixed(2) + "%");
+      }
+    }
+
+    conversionType.addEventListener("change", loadInputs);
+    convertBtn.addEventListener("click", convert);
+    loadInputs(); // Initial load
+  </script>
+</body>
+</html>
