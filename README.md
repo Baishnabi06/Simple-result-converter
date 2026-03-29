@@ -13,7 +13,7 @@ A simple web-based tool to convert academic scores between different grading sys
 
 - Convert **Percentage → CGPA**
 - Convert **SGPA → CGPA**
-- Convert **SGPA → Percentage**
+- Convert **CGPA → Percentage**
 - Convert **Total Marks → Percentage**
 - Real-time input validation and result display
 
